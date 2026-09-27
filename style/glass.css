@@ -1,0 +1,246 @@
+/* glass.css —— iOS 26 Liquid Glass 质感增强
+ * 只增强视觉质感，不改布局/内容/功能
+ * 关键：轻模糊 + 顶部高光 + 边缘光线 + 通透
+ */
+
+/* ===== 小控件统一液态玻璃质感 ===== */
+.socials a,
+.links li,
+.ctrl,
+.search input,
+.hitokoto .h-refresh,
+.hitokoto .h-head .tag,
+.search-add {
+  backdrop-filter: blur(6px) saturate(160%);
+  -webkit-backdrop-filter: blur(6px) saturate(160%);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+/* ===== 社交图标 ===== */
+.socials a {
+  transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+.socials a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== 播放键 —— 液态玻璃主按钮 ===== */
+.ctrl-play {
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    0 12px 28px rgba(0, 0, 0, 0.35);
+}
+.ctrl-play:hover {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.12));
+}
+
+/* ===== 图标按钮 ===== */
+.ctrl-icon {
+  transition: background 0.22s ease, box-shadow 0.22s ease;
+}
+.ctrl-icon:hover {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    0 6px 14px rgba(0, 0, 0, 0.14);
+}
+.ctrl-icon.active {
+  background: rgba(124, 198, 255, 0.16);
+  border-color: var(--accent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 12px rgba(124, 198, 255, 0.3);
+}
+
+/* ===== 搜索框 ===== */
+.search input {
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.search input:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 0 3px rgba(124, 198, 255, 0.15);
+}
+
+/* ===== 一言刷新按钮 ===== */
+.hitokoto .h-refresh {
+  transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+.hitokoto .h-refresh:hover {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    0 6px 14px rgba(0, 0, 0, 0.14);
+}
+
+/* ===== 头像环 ===== */
+.avatar-ring {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+/* ===== 封面盘 ===== */
+.disc {
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+}
+
+/* ===== 搜索结果面板 ===== */
+.search-result {
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  background: rgba(20, 20, 35, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+/* ===== macOS 顶部菜单栏（仅宽屏） ===== */
+.mac-menubar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  padding: 0 12px;
+  background: linear-gradient(to bottom, rgba(50, 50, 50, 0.3), transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  z-index: 100;
+  font-family: apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+}
+.menubar-left, .menubar-right {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.menubar-app {
+  font-weight: 600;
+}
+.mac-menubar span {
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+.mac-menubar span:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.apple-logo {
+  height: 16px;
+  width: auto;
+  margin: 0 8px 0 4px;
+  display: block;
+}
+.menubar-icon-img, .menubar-icon-svg {
+  margin: 0 4px;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.menubar-icon-img {
+  height: 14px;
+  width: auto;
+}
+#menubarTime {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700 !important;
+  font-size: 13px;
+  margin-left: 10px;
+  letter-spacing: -0.2px;
+  line-height: 1;
+}
+
+/* ===== iPhone 状态栏（仅手机端） ===== */
+.ios-statusbar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 54px;
+  padding: 0 20px 0 28px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  font-family: apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #fff;
+  pointer-events: none;
+}
+.sb-time {
+  font-family: apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 16px;
+  font-weight: 700 !important;
+  letter-spacing: -0.3px;
+  min-width: 56px;
+  padding-left: 4px;
+  font-feature-settings: "tnum";
+}
+.sb-right {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #fff;
+}
+.sb-right svg {
+  display: block;
+}
+.sb-wifi {
+  width: 26px;
+  height: auto;
+  display: block;
+}
+
+/* 灵动岛 —— 居中黑色胶囊 */
+.dynamic-island {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 118px;
+  height: 34px;
+  background: #000;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* 宽屏：显示 macOS 菜单栏 */
+@media (min-width: 621px) {
+  .ios-statusbar { display: none; }
+  body { padding-top: 56px; }
+}
+
+/* 手机端：显示 iPhone 状态栏，隐藏 macOS 菜单栏 */
+@media (max-width: 620px) {
+  .mac-menubar { display: none; }
+  .ios-statusbar { display: flex; }
+  body { padding-top: 70px; }
+}
