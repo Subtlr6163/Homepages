@@ -10,6 +10,7 @@ liquid-glass-homepage/
 ├── config.js               # 全局配置（只改这一个文件）
 ├── assets/
 │   ├── avatar.jpg          # 头像
+│   └── default-cover.jpg   # 默认封面
 ├── style/
 │   ├── base.css            # 基础样式 + 动态背景
 │   ├── glass.css           # 液态玻璃点缀

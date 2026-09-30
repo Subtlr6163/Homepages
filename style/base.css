@@ -2,10 +2,10 @@
   --text: #f5f7fb;
   --muted: rgba(245, 247, 251, 0.68);
   --muted-2: rgba(245, 247, 251, 0.42);
-  --glass: rgba(255, 255, 255, 0.10);
-  --glass-strong: rgba(255, 255, 255, 0.16);
-  --border: rgba(255, 255, 255, 0.22);
-  --border-strong: rgba(255, 255, 255, 0.34);
+  --glass: rgba(255, 255, 255, 0.07);
+  --glass-strong: rgba(255, 255, 255, 0.10);
+  --border: rgba(255, 255, 255, 0.28);
+  --border-strong: rgba(255, 255, 255, 0.45);
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
   --radius: 28px;
   --accent: #7cc6ff;
@@ -38,12 +38,19 @@ body {
   position: fixed;
   inset: 0;
   z-index: -3;
-  background-image: url("https://uapis.cn/api/v1/random/image?category=acg&type=pc");
+  background-image: url("https://uapis.cn/api/v1/random/image?category=acg&type=mb");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-color: #0d0f1a;
-  filter: brightness(0.6);
+  filter: brightness(0.72) saturate(1.05);
+}
+
+/* 电脑端用横版背景 */
+@media (min-width: 621px) {
+  .bg {
+    background-image: url("https://uapis.cn/api/v1/random/image?category=acg&type=pc");
+  }
 }
 
 /* 背景光斑 —— 静态 radial-gradient，不带动画，不重绘 */
@@ -67,31 +74,38 @@ body {
   background: radial-gradient(circle, #00c2ff 0%, transparent 70%);
 }
 
-/* 通用卡片 —— iOS 26 Liquid Glass：轻薄透明玻璃 + 边缘光线 */
+/* 通用卡片 —— 液态玻璃（真实版）：
+ * 更透：背景不透明度 ~0.07 + 极小模糊，内容清晰透出
+ * 更亮：顶部高光 + 边缘光，靠"光"而非"糊"来分离层次
+ * 会变色：边缘高光/内部微光跟随封面主色（--glass-rgb，见 glass.js）
+ */
 .card {
   position: relative;
   padding: 24px;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px) saturate(160%);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(var(--glass-rgb), 0.32);
+  backdrop-filter: blur(5px) saturate(170%) brightness(1.06);
+  -webkit-backdrop-filter: blur(5px) saturate(170%) brightness(1.06);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    0 20px 50px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 18px 44px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12);
   overflow: hidden;
 }
-/* 玻璃表面高光 */
+/* 玻璃表面：顶部高光渐变（specular）+ 边缘聚光（透镜感） */
 .card::before {
   content: "";
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(120% 70% at 50% -12%, rgba(255, 255, 255, 0.20), transparent 55%),
     linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.08) 0%,
-      transparent 25%
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.03) 22%,
+      transparent 46%
     );
   pointer-events: none;
   z-index: 0;
@@ -100,12 +114,8 @@ body {
 
 /* Footer */
 .footer {
-  position: fixed;
-  bottom: 16px;
-  left: 0;
-  right: 0;
   text-align: center;
-  z-index: 50;
+  padding: 20px 0 10px;
   font-size: 12px;
   color: var(--muted-2);
 }

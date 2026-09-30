@@ -54,15 +54,21 @@
   }
 
   function applyMood(color, bgEl, blobs) {
+    // 把主色注入 --glass-rgb，玻璃边框/高光/发光跟随内容变色（自适应着色）
+    var c = color && color.match(/\d+/g);
+    if (c && c.length >= 3) {
+      var rgb = c[0] + ", " + c[1] + ", " + c[2];
+      document.documentElement.style.setProperty("--glass-rgb", rgb);
+    }
     // 背景已改为随机图片，不再用封面色覆盖背景图；仅保留光斑颜色联动
     var glowA = blobs && blobs[0];
     var glowB = blobs && blobs[1];
     if (glowA) glowA.style.background = "radial-gradient(circle, " + color + " 0%, transparent 70%)";
     if (glowB) {
-      var c = color.match(/\d+/g);
-      if (c) {
-        var shifted = "radial-gradient(circle, rgb(" + c[0] + ", " +
-          Math.round(c[1] * 0.6) + ", 255) 0%, transparent 70%)";
+      var cc = color.match(/\d+/g);
+      if (cc) {
+        var shifted = "radial-gradient(circle, rgb(" + cc[0] + ", " +
+          Math.round(cc[1] * 0.6) + ", 255) 0%, transparent 70%)";
         glowB.style.background = shifted;
       }
     }

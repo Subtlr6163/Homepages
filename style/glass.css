@@ -1,121 +1,153 @@
-/* glass.css —— iOS 26 Liquid Glass 质感增强
- * 只增强视觉质感，不改布局/内容/功能
- * 关键：轻模糊 + 顶部高光 + 边缘光线 + 通透
+/* glass.css —— 液态玻璃（Liquid Glass）质感
+ *
+ * 对照 Apple「Meet Liquid Glass」官方定义重写：
+ *  - 不是毛玻璃：模糊极小（3-6px），内容几乎完整透出
+ *  - 靠高光分离层次：顶部 specular 高光 + 边缘亮线
+ *  - 自适应着色：边框/高光跟随封面主色（--glass-rgb，由 glass.js 写入）
+ *  - 交互时"由内点亮"：hover/active 从元素内部发光扩散
+ *
+ * 选择器统一带 .card 前缀以提高特异性，
+ * 防止被后加载的 player.css / hitokoto.css 同选择器规则覆盖。
+ * 只改玻璃质感，不改布局 / 内容 / 功能
  */
 
 /* ===== 小控件统一液态玻璃质感 ===== */
-.socials a,
-.links li,
-.ctrl,
-.search input,
-.hitokoto .h-refresh,
-.hitokoto .h-head .tag,
-.search-add {
-  backdrop-filter: blur(6px) saturate(160%);
-  -webkit-backdrop-filter: blur(6px) saturate(160%);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.card .socials a,
+.card .links li,
+.card .ctrl,
+.card .search input,
+.card .hitokoto .h-refresh,
+.card .hitokoto .h-head .tag,
+.card .search-add {
+  backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
+  -webkit-backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(var(--glass-rgb), 0.35);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 /* ===== 社交图标 ===== */
-.socials a {
-  transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+.card .socials a {
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.socials a:hover {
-  background: rgba(255, 255, 255, 0.18);
+.card .socials a:hover {
+  background: rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-    0 6px 16px rgba(0, 0, 0, 0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    0 0 14px rgba(var(--glass-rgb), 0.35),
+    0 6px 14px rgba(0, 0, 0, 0.16);
+}
+.card .socials a:active {
+  transform: scale(0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 0 20px rgba(var(--glass-rgb), 0.5);
 }
 
-/* ===== 播放键 —— 液态玻璃主按钮 ===== */
-.ctrl-play {
-  backdrop-filter: blur(8px) saturate(160%);
-  -webkit-backdrop-filter: blur(8px) saturate(160%);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
-  border: 1px solid rgba(255, 255, 255, 0.18);
+/* ===== 播放键 —— 液态玻璃主按钮（更大、更亮的高光） ===== */
+.card .ctrl-play {
+  backdrop-filter: blur(4px) saturate(170%) brightness(1.06);
+  -webkit-backdrop-filter: blur(4px) saturate(170%) brightness(1.06);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(var(--glass-rgb), 0.55);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.15),
-    inset 0 1px 1px rgba(255, 255, 255, 0.4),
-    0 12px 28px rgba(0, 0, 0, 0.35);
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.75),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 0 18px rgba(255, 255, 255, 0.10),
+    0 10px 24px rgba(0, 0, 0, 0.3);
 }
-.ctrl-play:hover {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.12));
+.card .ctrl-play:hover {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08));
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.85),
+    inset 0 0 24px rgba(255, 255, 255, 0.16),
+    0 0 22px rgba(var(--glass-rgb), 0.45),
+    0 12px 28px rgba(0, 0, 0, 0.34);
+}
+.card .ctrl-play:active {
+  transform: scale(0.94);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    0 0 30px rgba(var(--glass-rgb), 0.6);
 }
 
 /* ===== 图标按钮 ===== */
-.ctrl-icon {
-  transition: background 0.22s ease, box-shadow 0.22s ease;
+.card .ctrl-icon {
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
-.ctrl-icon:hover {
-  background: rgba(255, 255, 255, 0.18);
+.card .ctrl-icon:hover {
+  background: rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-    0 6px 14px rgba(0, 0, 0, 0.14);
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    0 0 14px rgba(var(--glass-rgb), 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.14);
 }
-.ctrl-icon.active {
-  background: rgba(124, 198, 255, 0.16);
-  border-color: var(--accent);
+.card .ctrl-icon.active {
+  background: rgba(124, 198, 255, 0.14);
+  border-color: rgba(var(--glass-rgb), 0.85);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 0 12px rgba(124, 198, 255, 0.3);
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 0 16px rgba(124, 198, 255, 0.45);
 }
 
 /* ===== 搜索框 ===== */
-.search input {
+.card .search input {
   transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
-.search input:focus {
-  border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.12);
+.card .search input:focus {
+  border-color: rgba(var(--glass-rgb), 0.9);
+  background: rgba(255, 255, 255, 0.10);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 0 0 3px rgba(124, 198, 255, 0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 0 0 3px rgba(var(--glass-rgb), 0.22),
+    0 0 16px rgba(var(--glass-rgb), 0.25);
 }
 
 /* ===== 一言刷新按钮 ===== */
-.hitokoto .h-refresh {
-  transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+.card .hitokoto .h-refresh {
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.hitokoto .h-refresh:hover {
-  background: rgba(255, 255, 255, 0.18);
+.card .hitokoto .h-refresh:hover {
+  background: rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-    0 6px 14px rgba(0, 0, 0, 0.14);
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 0 14px rgba(var(--glass-rgb), 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.14);
 }
 
-/* ===== 头像环 ===== */
-.avatar-ring {
+/* ===== 头像环：更轻的悬浮阴影 ===== */
+.card .avatar-ring {
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 8px 24px rgba(0, 0, 0, 0.22);
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 10px 26px rgba(0, 0, 0, 0.18);
 }
 
 /* ===== 封面盘 ===== */
-.disc {
+.card .disc {
   box-shadow:
-    0 14px 36px rgba(0, 0, 0, 0.4),
-    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+    0 14px 34px rgba(0, 0, 0, 0.32),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 /* ===== 搜索结果面板 ===== */
-.search-result {
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  background: rgba(20, 20, 35, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.card .search-result {
+  backdrop-filter: blur(6px) saturate(160%) brightness(1.04);
+  -webkit-backdrop-filter: blur(6px) saturate(160%) brightness(1.04);
+  background: rgba(18, 18, 30, 0.22);
+  border: 1px solid rgba(var(--glass-rgb), 0.25);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    0 12px 28px rgba(0, 0, 0, 0.28);
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 12px 26px rgba(0, 0, 0, 0.24);
 }
 
-/* ===== macOS 顶部菜单栏（仅宽屏） ===== */
+/* ===== macOS 顶部菜单栏（仅宽屏）—— 更透、更小的模糊 ===== */
 .mac-menubar {
   display: flex;
   align-items: center;
@@ -126,9 +158,10 @@
   right: 0;
   height: 28px;
   padding: 0 12px;
-  background: linear-gradient(to bottom, rgba(50, 50, 50, 0.3), transparent);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: linear-gradient(to bottom, rgba(40, 40, 55, 0.16), rgba(40, 40, 55, 0.02));
+  backdrop-filter: blur(6px) saturate(160%) brightness(1.06);
+  -webkit-backdrop-filter: blur(6px) saturate(160%) brightness(1.06);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.10);
   z-index: 100;
   font-family: apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
     Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -150,7 +183,7 @@
   transition: background 0.15s ease;
 }
 .mac-menubar span:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.18);
 }
 .apple-logo {
   height: 16px;
