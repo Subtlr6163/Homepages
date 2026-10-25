@@ -17,7 +17,6 @@
   var playBtn = $("playBtn");
   var prevBtn = $("prevBtn");
   var nextBtn = $("nextBtn");
-  var refreshBtn = $("refreshBtn");
   var cover = $("cover");
   var coverImg = (cover && cover.tagName === "IMG") ? cover
     : (cover && cover.querySelector ? cover.querySelector("img") : null);
@@ -316,13 +315,6 @@
 
   on(prevBtn, "click", function () { prevTrack(); });
   on(nextBtn, "click", function () { nextTrack(); });
-
-  on(refreshBtn, "click", function () {
-    index = -1;
-    queue = [];
-    started = false;
-    initQueue();
-  });
 
   /* ===== 搜索 ===== */
   function doSearch() {

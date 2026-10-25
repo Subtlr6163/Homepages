@@ -74,43 +74,63 @@ body {
   background: radial-gradient(circle, #00c2ff 0%, transparent 70%);
 }
 
-/* 通用卡片 —— 液态玻璃（真实版）：
- * 更透：背景不透明度 ~0.07 + 极小模糊，内容清晰透出
- * 更亮：顶部高光 + 边缘光，靠"光"而非"糊"来分离层次
- * 会变色：边缘高光/内部微光跟随封面主色（--glass-rgb，见 glass.js）
+/* 通用卡片 —— 液态玻璃（Liquid Glass 复刻手法）
+ * 借鉴「contrast 对比增强 + 对角成对边缘光 + 内缘暗圈 + 斜向光带」：
+ *  - 背景不透明度 ~0.05 + 1px 模糊，内容完整透出
+ *  - inset 对角亮边（左上/右下）模拟光在玻璃边缘的折射聚光
+ *  - inset 暗圈模拟玻璃厚度
+ *  - ::before 斜向白色光带（45°）+ 顶部微光，模拟环境光反射
+ *  - 外层 contrast 温和增强，放大边缘光晕（lensing 感）
+ * 会变色：边缘光/高光跟随封面主色（--glass-rgb，见 glass.js）
  */
 .card {
   position: relative;
   padding: 24px;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(var(--glass-rgb), 0.32);
-  backdrop-filter: blur(5px) saturate(170%) brightness(1.06);
-  -webkit-backdrop-filter: blur(5px) saturate(170%) brightness(1.06);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(var(--glass-rgb), 0.30);
+  backdrop-filter: blur(1px) saturate(170%) brightness(1.08);
+  -webkit-backdrop-filter: blur(1px) saturate(170%) brightness(1.08);
+  filter: contrast(1.08) saturate(1.05);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 18px 44px rgba(0, 0, 0, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.6),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.6),
+    inset 6px -6px 1px -6px rgba(255, 255, 255, 0.35),
+    inset -6px 6px 1px -6px rgba(255, 255, 255, 0.35),
+    inset 0 0 2px rgba(0, 0, 0, 0.55),
+    0 18px 44px rgba(0, 0, 0, 0.26);
   overflow: hidden;
 }
-/* 玻璃表面：顶部高光渐变（specular）+ 边缘聚光（透镜感） */
+/* 玻璃表面：45° 斜向光带（环境光反射）+ 顶部聚光 */
 .card::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -8px;
   background:
-    radial-gradient(120% 70% at 50% -12%, rgba(255, 255, 255, 0.20), transparent 55%),
     linear-gradient(
-      to bottom,
+      45deg,
       rgba(255, 255, 255, 0.16) 0%,
-      rgba(255, 255, 255, 0.03) 22%,
-      transparent 46%
-    );
+      transparent 22%,
+      transparent 68%,
+      rgba(255, 255, 255, 0.16) 100%
+    ),
+    radial-gradient(130% 80% at 50% -14%, rgba(255, 255, 255, 0.22), transparent 58%);
+  filter: blur(5px);
   pointer-events: none;
   z-index: 0;
 }
 .card > * { position: relative; z-index: 1; }
+
+/* 文字可读性：深色投影垫底，字从亮背景中跳出（不加大模糊） */
+.card h1, .card h2, .card h3, .card p, .card li,
+.card .name, .card .bio,
+.card .track-name, .card .track-artist,
+.card .state, .card .lyrics-hint, .card .time,
+.card .h-head, .card .h-text, .card .h-foot,
+.card .search-item b, .card .search-item span,
+.card .search-add, .card .error-tip {
+  text-shadow: 0 1px 3px rgba(8, 10, 18, 0.55), 0 0 12px rgba(8, 10, 18, 0.35);
+}
 
 /* Footer */
 .footer {

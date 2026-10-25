@@ -1,20 +1,12 @@
 /*
  * app.js —— 全局初始化
  *
- * 只做两件事：
+ * 只做一件事：
  *   1) 一言：自动加载第一条，绑定刷新按钮
- *   2) 随机播放开关初始状态
  */
 
 (function () {
   "use strict";
-
-  /* ===== 随机播放开关 ===== */
-  var shuffleBtn = document.getElementById("shuffleBtn");
-  if (shuffleBtn) {
-    shuffleBtn.classList.add("active");
-    shuffleBtn.setAttribute("title", "随机播放");
-  }
 
   /* ===== 一言 ===== */
   var hType = document.getElementById("hType");

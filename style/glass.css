@@ -1,17 +1,22 @@
 /* glass.css —— 液态玻璃（Liquid Glass）质感
  *
- * 对照 Apple「Meet Liquid Glass」官方定义重写：
- *  - 不是毛玻璃：模糊极小（3-6px），内容几乎完整透出
- *  - 靠高光分离层次：顶部 specular 高光 + 边缘亮线
+ * 借鉴知名 Liquid Glass CSS 复刻的核心手法：
+ *  - 对角成对边缘光（inset 2px -2px / -2px 2px / 更宽 5-7px 成对）
+ *    → 模拟光在玻璃边缘的折射聚光
+ *  - 内缘暗圈（inset 0 0 2-3px rgba(0,0,0,.5)）→ 模拟玻璃厚度
+ *  - ::after 45° 斜向白色光带 + blur → 模拟环境光在表面的反射
+ *  - 背景不透明度 ~0.05 + 极小模糊 → 内容完整透出
+ *  - 外层 filter: contrast 温和增强 → 放大边缘光晕（lensing 感）
  *  - 自适应着色：边框/高光跟随封面主色（--glass-rgb，由 glass.js 写入）
- *  - 交互时"由内点亮"：hover/active 从元素内部发光扩散
  *
  * 选择器统一带 .card 前缀以提高特异性，
  * 防止被后加载的 player.css / hitokoto.css 同选择器规则覆盖。
  * 只改玻璃质感，不改布局 / 内容 / 功能
  */
 
-/* ===== 小控件统一液态玻璃质感 ===== */
+/* ===== 小控件统一液态玻璃质感 =====
+ * 圆形控件：对角成对边缘光 + 内缘暗圈 + ::after 斜向光带
+ */
 .card .socials a,
 .card .links li,
 .card .ctrl,
@@ -19,15 +24,48 @@
 .card .hitokoto .h-refresh,
 .card .hitokoto .h-head .tag,
 .card .search-add {
-  backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
-  -webkit-backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
-  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(0.5px) saturate(170%) brightness(1.08);
+  -webkit-backdrop-filter: blur(0.5px) saturate(170%) brightness(1.08);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(var(--glass-rgb), 0.35);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.7),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.7),
+    inset 5px -5px 1px -5px rgba(255, 255, 255, 0.4),
+    inset -5px 5px 1px -5px rgba(255, 255, 255, 0.4),
+    inset 0 0 2px rgba(0, 0, 0, 0.5),
     0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* 圆形控件的斜向光带（环境光反射） */
+.card .socials a,
+.card .ctrl,
+.card .hitokoto .h-refresh {
+  position: relative;
+}
+.card .socials a::after,
+.card .ctrl::after,
+.card .hitokoto .h-refresh::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 24%,
+    transparent 76%,
+    rgba(255, 255, 255, 0.35) 100%
+  );
+  filter: blur(2.5px);
+  pointer-events: none;
+  z-index: 1;
+}
+.card .socials a > *,
+.card .ctrl > *,
+.card .hitokoto .h-refresh > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* ===== 社交图标 ===== */
@@ -37,8 +75,11 @@
 .card .socials a:hover {
   background: rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset 5px -5px 1px -5px rgba(255, 255, 255, 0.5),
+    inset -5px 5px 1px -5px rgba(255, 255, 255, 0.5),
+    inset 0 0 2px rgba(0, 0, 0, 0.5),
     0 0 14px rgba(var(--glass-rgb), 0.35),
     0 6px 14px rgba(0, 0, 0, 0.16);
 }
@@ -51,21 +92,38 @@
 
 /* ===== 播放键 —— 液态玻璃主按钮（更大、更亮的高光） ===== */
 .card .ctrl-play {
-  backdrop-filter: blur(4px) saturate(170%) brightness(1.06);
-  -webkit-backdrop-filter: blur(4px) saturate(170%) brightness(1.06);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(1px) saturate(170%) brightness(1.08);
+  -webkit-backdrop-filter: blur(1px) saturate(170%) brightness(1.08);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
   border: 1px solid rgba(var(--glass-rgb), 0.55);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    inset 0 1px 1px rgba(255, 255, 255, 0.75),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.85),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.85),
+    inset 7px -7px 1px -7px rgba(255, 255, 255, 0.5),
+    inset -7px 7px 1px -7px rgba(255, 255, 255, 0.5),
+    inset 0 0 3px rgba(0, 0, 0, 0.55),
     inset 0 0 18px rgba(255, 255, 255, 0.10),
     0 10px 24px rgba(0, 0, 0, 0.3);
 }
+.card .ctrl-play::after {
+  inset: -4px;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    transparent 26%,
+    transparent 74%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  filter: blur(3px);
+}
 .card .ctrl-play:hover {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08));
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.07));
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.85),
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 1),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 1),
+    inset 7px -7px 1px -7px rgba(255, 255, 255, 0.6),
+    inset -7px 7px 1px -7px rgba(255, 255, 255, 0.6),
+    inset 0 0 3px rgba(0, 0, 0, 0.5),
     inset 0 0 24px rgba(255, 255, 255, 0.16),
     0 0 22px rgba(var(--glass-rgb), 0.45),
     0 12px 28px rgba(0, 0, 0, 0.34);
@@ -84,8 +142,11 @@
 .card .ctrl-icon:hover {
   background: rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset 5px -5px 1px -5px rgba(255, 255, 255, 0.5),
+    inset -5px 5px 1px -5px rgba(255, 255, 255, 0.5),
+    inset 0 0 2px rgba(0, 0, 0, 0.5),
     0 0 14px rgba(var(--glass-rgb), 0.35),
     0 4px 12px rgba(0, 0, 0, 0.14);
 }
@@ -105,7 +166,9 @@
   border-color: rgba(var(--glass-rgb), 0.9);
   background: rgba(255, 255, 255, 0.10);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.7),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.7),
+    inset 0 0 2px rgba(0, 0, 0, 0.5),
     0 0 0 3px rgba(var(--glass-rgb), 0.22),
     0 0 16px rgba(var(--glass-rgb), 0.25);
 }
@@ -117,7 +180,11 @@
 .card .hitokoto .h-refresh:hover {
   background: rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 2px -2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset -2px 2px 1px -1px rgba(255, 255, 255, 0.9),
+    inset 5px -5px 1px -5px rgba(255, 255, 255, 0.5),
+    inset -5px 5px 1px -5px rgba(255, 255, 255, 0.5),
+    inset 0 0 2px rgba(0, 0, 0, 0.5),
     0 0 14px rgba(var(--glass-rgb), 0.35),
     0 4px 12px rgba(0, 0, 0, 0.14);
 }
@@ -138,12 +205,12 @@
 
 /* ===== 搜索结果面板 ===== */
 .card .search-result {
-  backdrop-filter: blur(6px) saturate(160%) brightness(1.04);
-  -webkit-backdrop-filter: blur(6px) saturate(160%) brightness(1.04);
+  backdrop-filter: blur(2px) saturate(160%) brightness(1.04);
+  -webkit-backdrop-filter: blur(2px) saturate(160%) brightness(1.04);
   background: rgba(18, 18, 30, 0.22);
   border: 1px solid rgba(var(--glass-rgb), 0.25);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
     0 12px 26px rgba(0, 0, 0, 0.24);
 }
 
@@ -158,10 +225,10 @@
   right: 0;
   height: 28px;
   padding: 0 12px;
-  background: linear-gradient(to bottom, rgba(40, 40, 55, 0.16), rgba(40, 40, 55, 0.02));
-  backdrop-filter: blur(6px) saturate(160%) brightness(1.06);
-  -webkit-backdrop-filter: blur(6px) saturate(160%) brightness(1.06);
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.10);
+  background: linear-gradient(to bottom, rgba(40, 40, 55, 0.14), rgba(40, 40, 55, 0.02));
+  backdrop-filter: blur(2px) saturate(160%) brightness(1.06);
+  -webkit-backdrop-filter: blur(2px) saturate(160%) brightness(1.06);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.16);
   z-index: 100;
   font-family: apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
     Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -218,7 +285,7 @@
   left: 0;
   right: 0;
   height: 54px;
-  padding: 0 20px 0 28px;
+  padding: 0 24px;
   align-items: center;
   justify-content: space-between;
   z-index: 100;
@@ -233,14 +300,15 @@
   font-size: 16px;
   font-weight: 700 !important;
   letter-spacing: -0.3px;
-  min-width: 56px;
+  min-width: 60px;
   padding-left: 4px;
   font-feature-settings: "tnum";
 }
 .sb-right {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 3px;
+  margin-right: 2px;
   color: #fff;
 }
 .sb-right svg {
@@ -252,17 +320,20 @@
   display: block;
 }
 
-/* 灵动岛 —— 居中黑色胶囊 */
+/* 灵动岛 —— 居中黑色胶囊（iPhone 18 Pro 样式）
+ * 18 Pro 灵动岛宽度由上代 ~20.76mm 缩至 ~13.49mm（收窄约 35%），
+ * 面积减少约 35%；绝对定位居中。
+ */
 .dynamic-island {
   position: absolute;
-  top: 12px;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 118px;
+  width: 90px;
   height: 34px;
   background: #000;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 17px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.55), inset 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 /* 宽屏：显示 macOS 菜单栏 */
